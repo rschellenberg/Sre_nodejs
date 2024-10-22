@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Node.js App</title>
+</head>
+<body>
+    <h1>AWS Node.js Application</h1>
+    <form id="writeForm">
+        <input type="text" id="id" placeholder="ID" required />
+        <input type="text" id="value" placeholder="Value" required />
+        <button type="submit">Write to Database</button>
+    </form>
+
+    <form id="readForm">
+        <input type="text" id="readId" placeholder="ID" required />
+        <button type="submit">Read from Database</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('writeForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('id').value;
+            const value = document.getElementById('value').value;
+            const response = await fetch('/write', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, value })
+            });
+            const text = await response.text();
+            document.getElementById('result').innerText = text;
+        };
+
+        document.getElementById('readForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('readId').value;
+            const response = await fetch(`/read/${id}`);
+            const text = await response.text();
+            document.getElementById('result').innerText = text;
+        };
+    </script>
+</body>
+</html>
